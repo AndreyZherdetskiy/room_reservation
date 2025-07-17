@@ -1,0 +1,33 @@
+# Виртуальное окружение
+venv/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Секреты и переменные окружения
+.env
+
+# База данных
+fastapi.db
+*.db
+
+# Alembic
+alembic/versions/__pycache__/
+
+# IDE/OS
+.DS_Store
+.idea/
+.vscode/
+
+# Логи
+*.log
+
+# Тестовые файлы
+*.pytest_cache/
+
+# Другие временные файлы
+*.swp
+*.swo 
