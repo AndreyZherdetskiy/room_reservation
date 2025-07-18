@@ -17,7 +17,7 @@ from app.core.user import current_superuser, current_user
 from app.crud.reservation import reservation_crud
 from app.models import User
 from app.schemas.reservation import ReservationCreate, ReservationDB, ReservationUpdate
-from app.api.endpoints.constants import ReservationConstants
+from app.api.constants import ReservationConstants
 
 router = APIRouter()
 

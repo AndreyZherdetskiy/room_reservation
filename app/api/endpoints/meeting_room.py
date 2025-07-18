@@ -14,7 +14,7 @@ from app.crud.meeting_room import meeting_room_crud
 from app.crud.reservation import reservation_crud
 from app.schemas.meeting_room import MeetingRoomCreate, MeetingRoomDB, MeetingRoomUpdate
 from app.schemas.reservation import ReservationDB
-from app.api.endpoints.constants import MeetingRoomConstants
+from app.api.constants import MeetingRoomConstants
 
 router = APIRouter()
 

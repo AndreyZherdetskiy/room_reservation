@@ -5,6 +5,7 @@ Pydantic-схемы для работы с переговорными комна
 from typing import Optional
 
 from pydantic import BaseModel, Field, validator
+from app.schemas.constants import SchemaBaseConstants, MeetingRoomMessages
 
 class MeetingRoomBase(BaseModel):
     """
@@ -14,7 +15,7 @@ class MeetingRoomBase(BaseModel):
         name (Optional[str]): Название комнаты.
         description (Optional[str]): Описание комнаты.
     """
-    name: Optional[str] = Field(None, min_length=1, max_length=100)
+    name: Optional[str] = Field(None, min_length=SchemaBaseConstants.MIN_NAME_LENGTH, max_length=SchemaBaseConstants.MAX_NAME_LENGTH)
     description: Optional[str]
 
 class MeetingRoomCreate(MeetingRoomBase):
@@ -24,7 +25,7 @@ class MeetingRoomCreate(MeetingRoomBase):
     Attributes:
         name (str): Название комнаты (обязательное).
     """
-    name: str = Field(..., min_length=1, max_length=100)
+    name: str = Field(..., min_length=SchemaBaseConstants.MIN_NAME_LENGTH, max_length=SchemaBaseConstants.MAX_NAME_LENGTH)
 
     @validator('name')
     def validate_name(cls, value: str) -> str:
@@ -41,9 +42,9 @@ class MeetingRoomCreate(MeetingRoomBase):
             ValueError: Если имя пустое или слишком длинное.
         """
         if not value:
-            raise ValueError('Строка не должна быть пустой')
-        if len(value) > 100:
-            raise ValueError('Длина поля не должна превышать 100 символов')
+            raise ValueError(MeetingRoomMessages.EMPTY_NAME)
+        if len(value) > SchemaBaseConstants.MAX_NAME_LENGTH:
+            raise ValueError(MeetingRoomMessages.NAME_TOO_LONG)
         return value
 
 class MeetingRoomUpdate(MeetingRoomBase):
@@ -65,9 +66,9 @@ class MeetingRoomUpdate(MeetingRoomBase):
             ValueError: Если имя пустое или слишком длинное.
         """
         if value is None:
-            raise ValueError('Имя переговорки не может быть пустым!')
-        if len(value) > 100:
-            raise ValueError('Длина поля не должна превышать 100 символов')
+            raise ValueError(MeetingRoomMessages.EMPTY_NAME_UPDATE)
+        if len(value) > SchemaBaseConstants.MAX_NAME_LENGTH:
+            raise ValueError(MeetingRoomMessages.NAME_TOO_LONG)
         return value
 
 class MeetingRoomDB(MeetingRoomCreate):

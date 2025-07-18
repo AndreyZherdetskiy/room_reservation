@@ -6,13 +6,14 @@ from datetime import datetime, timedelta
 from typing import Optional
 
 from pydantic import BaseModel, Extra, Field, root_validator, validator
+from app.schemas.constants import ReservationMessages, ReservationTimeDefaults
 
 FROM_TIME = (
-    datetime.now() + timedelta(minutes=10)
+    datetime.now() + timedelta(minutes=ReservationTimeDefaults.FROM_MINUTES_SHIFT)
 ).isoformat(timespec='minutes')
 
 TO_TIME = (
-    datetime.now() + timedelta(hours=1)
+    datetime.now() + timedelta(hours=ReservationTimeDefaults.TO_HOURS_SHIFT)
 ).isoformat(timespec='minutes')
 
 
@@ -51,7 +52,7 @@ class ReservationUpdate(ReservationBase):
         """
         if value <= datetime.now():
             raise ValueError(
-                'Время начала бронирования не может быть меньше текущего времени'
+                ReservationMessages.FROM_LESS_THAN_NOW
             )
         return value
 
@@ -71,7 +72,7 @@ class ReservationUpdate(ReservationBase):
         """
         if values['from_reserve'] >= values['to_reserve']:
             raise ValueError(
-                'Время начала бронирования не может быть больше времени окончания'
+                ReservationMessages.FROM_MORE_THAN_TO
             )
         return values
 

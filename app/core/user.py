@@ -16,6 +16,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
 from app.core.db import get_async_session
+from app.core.constants import UserPasswordConstants, JWTConstants
 from app.models.user import User
 from app.schemas.user import UserCreate
 
@@ -41,7 +42,7 @@ def get_jwt_strategy() -> JWTStrategy:
     Returns:
         JWTStrategy: Стратегия JWT.
     """
-    return JWTStrategy(secret=settings.secret, lifetime_seconds=3600)
+    return JWTStrategy(secret=settings.secret, lifetime_seconds=JWTConstants.LIFETIME_SECONDS)
 
 
 auth_backend = AuthenticationBackend(
@@ -70,13 +71,13 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
         Raises:
             InvalidPasswordException: Если пароль невалиден.
         """
-        if len(password) < 3:
+        if len(password) < UserPasswordConstants.MIN_LENGTH:
             raise InvalidPasswordException(
-                reason='Password should be at least 3 characters'
+                reason=UserPasswordConstants.TOO_SHORT
             )
         if user.email in password:
             raise InvalidPasswordException(
-                reason='Password should not contain e-mail'
+                reason=UserPasswordConstants.CONTAINS_EMAIL
             )
 
     async def on_after_register(
